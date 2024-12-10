@@ -1,11 +1,5 @@
 ﻿module Day10
 
-// TODO: do we need this?
-type Coord = {
-    Row: int
-    Col: int
-}
-
 type Node =
     | Height of int
     | Impassable
@@ -33,34 +27,42 @@ let getTrailheads (grid: Node[,]) =
         for r in 0..(grid.GetLength 0 - 1) do
             for c in 0..(grid.GetLength 1 - 1) do
                 if grid.[r,c] = Trailhead 
-                    then yield { Row = r; Col = c }
+                    then yield (r, c)
     }
 
-let getPeakCount (grid: Node[,]) (trailhead: Coord) =
+let findPeaks (grid: Node[,]) (trailhead: int * int) =
     let maxRow, maxCol = (grid.GetLength 0) - 1, (grid.GetLength 1) - 1
-    let getNeighboringNodes (c: Coord) (target: Node) =
+    let getNeighbors (r: int, c: int) (target: Node) =
         seq {
-            if c.Row > 0 && grid[c.Row - 1, c.Col] = target then yield { Row = c.Row - 1; Col = c.Col }
-            if c.Row < maxRow && grid[c.Row + 1, c.Col] = target then yield { Row = c.Row + 1; Col = c.Col }
-            if c.Col > 0 && grid[c.Row, c.Col - 1] = target then yield { Row = c.Row; Col = c.Col - 1 }
-            if c.Col < maxCol && grid[c.Row, c.Col + 1] = target then yield { Row = c.Row; Col = c.Col + 1 }
+            if r > 0 && grid[r - 1, c] = target then yield (r - 1, c)
+            if r < maxRow && grid[r + 1, c] = target then yield (r + 1, c)
+            if c > 0 && grid[r, c - 1] = target then yield (r, c - 1)
+            if c < maxCol && grid[r, c + 1] = target then yield (r, c + 1)
         }
-            
-    let rec walkTrail (coord: Coord) (peaks: Set<Coord>) =
-        let current = grid[coord.Row, coord.Col]
+
+    let rec walkTrail (r:int, c:int) (peaks: (int * int) seq) =
+        let current = grid[r, c]
         match current with
-        | Peak -> peaks.Add coord
+        | Peak -> Seq.append peaks [ (r, c) ]
         | Trailhead
         | Height _ ->
             let targetNode = Node.addRise current
-            getNeighboringNodes coord targetNode
+            getNeighbors (r, c) targetNode
             |> Seq.map (fun next ->
                 walkTrail next peaks)
-            |> Set.unionMany
+            |> Seq.concat
         | _ -> peaks
 
-    let result = walkTrail trailhead Set.empty
-    result |> Set.count
+    walkTrail trailhead Seq.empty
+
+let getPeakCount (grid: Node[,]) (trailhead: int * int) =
+    findPeaks grid trailhead
+    |> Seq.distinct
+    |> Seq.length
+
+let getTrailCount (grid: Node[,]) (trailhead: int * int) =
+    findPeaks grid trailhead
+    |> Seq.length
 
 let part1 (input:string seq) =
     let grid = input |> toGrid
@@ -69,4 +71,9 @@ let part1 (input:string seq) =
     |> Seq.map (getPeakCount grid)
     |> Seq.sum
 
-let part2 (input:string seq) = 0
+let part2 (input:string seq) =
+    let grid = input |> toGrid
+    
+    getTrailheads grid
+    |> Seq.map (getTrailCount grid)
+    |> Seq.sum
