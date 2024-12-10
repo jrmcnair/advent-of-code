@@ -1,4 +1,4 @@
-module AdventOfCode.Tests.Day9
+module Tests.Day9
 
 open Xunit
 open Day9.Part1

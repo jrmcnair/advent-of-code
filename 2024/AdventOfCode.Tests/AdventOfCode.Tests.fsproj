@@ -9,7 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Day9.fs" />
+        <Compile Include="Day9.Tests.fs" />
+        <Compile Include="Day10.Tests.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
