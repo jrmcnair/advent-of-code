@@ -3,34 +3,36 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>AdventOfCode.Solutions</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="input.txt">
+        <Content Include="Input\day6.txt">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="offgrid.txt">
+        <Content Include="Input\day6-sample.txt">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="overlap.txt">
+        <Content Include="Input\day7.txt">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="sample.txt">
+        <Content Include="Input\day7-sample.txt">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="sample-As-only.txt">
+        <Content Include="Input\day8.txt">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="sample-0s-only.txt">
+        <Content Include="Input\day8-sample.txt">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="sample-harmonics.txt">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <Content Include="Input\day9.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="single-pair.txt">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Compile Include="Program.fs"/>
+        <Compile Include="Day6.fs" />
+        <Compile Include="Day7.fs" />
+        <Compile Include="Day8.fs" />
+        <Compile Include="Day9.fs" />
+        <Compile Include="Program.fs" />
     </ItemGroup>
 
 </Project>

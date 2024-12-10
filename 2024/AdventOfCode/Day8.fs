@@ -1,4 +1,6 @@
-﻿open System.IO
+﻿module Day8
+
+open System.IO
 
 [<Struct>]
 [<StructuredFormatDisplay("({Row},{Col})")>]
@@ -17,7 +19,7 @@ let parse (row: int) (line: string) =
         else (frequency, Coord(row, col)) |> Some)
 
 let (size, antennas) =
-    let lines = File.ReadAllLines "input.txt" |> List.ofSeq
+    let lines = File.ReadAllLines "./Input/day6.txt" |> List.ofSeq
     let antennas =
         lines
         |> List.mapi parse
@@ -58,12 +60,14 @@ let toAntinodeSeq (a1: Coord, a2: Coord) =
 let countAntinodes (antinodes: Map<char, Coord seq>) =
     antinodes |> Map.toSeq |> Seq.map snd |> Seq.concat |> Seq.distinct |> Seq.length
 
-antennas
-|> Map.map (fun _ -> toPairs >> Seq.map toAntinodePair >> Seq.concat)
-|> countAntinodes
-|> printfn "part1: %A"
+let part1 () =
+    antennas
+    |> Map.map (fun _ -> toPairs >> Seq.map toAntinodePair >> Seq.concat)
+    |> countAntinodes
+    |> printfn "part1: %d"
 
-antennas
-|> Map.map (fun _ -> toPairs >> Seq.map toAntinodeSeq >> Seq.concat)
-|> countAntinodes
-|> printfn "part2: %A"
+let part2 () =
+    antennas
+    |> Map.map (fun _ -> toPairs >> Seq.map toAntinodeSeq >> Seq.concat)
+    |> countAntinodes
+    |> printfn "part2: %d"

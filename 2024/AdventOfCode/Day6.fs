@@ -1,6 +1,7 @@
-﻿open System
+﻿module Day6
+
+open System
 open System.IO
-open System.Runtime.CompilerServices
 
 [<Struct>]
 [<StructuredFormatDisplay("({Row},{Col})")>]
@@ -48,7 +49,7 @@ module Movement =
         then None
         else Some nxt
 
-let filename = "./input.txt"
+let filename = "./Input/day6.txt"
 
 let loadData filename  =
     filename
@@ -90,8 +91,10 @@ let tilesGuarded = patrol grid
 
 // -- part 1 -------------------------------------------------------------------
 
-tilesGuarded |> List.length
-|> printfn "part1: %A"
+let part1 () =
+    tilesGuarded
+    |> List.length
+    |> printfn "part1: %d"
 
 // -- part 2 -------------------------------------------------------------------
 
@@ -100,11 +103,9 @@ let getGridWithNewObstacle (grid: Tile[][]) (loc: Coord) =
 
 let startTime = DateTime.Now
 
-tilesGuarded
-|> List.filter (fun loc -> loc <> start)
-|> List.filter (fun loc -> getGridWithNewObstacle grid loc |> patrol |> List.isEmpty)
-|> List.length
-|> printfn "part2: %A"
-
-let endTime = DateTime.Now
-printfn $"Part 2 duration: {endTime - startTime}"
+let part2 () =
+    tilesGuarded
+    |> List.filter (fun loc -> loc <> start)
+    |> List.filter (fun loc -> getGridWithNewObstacle grid loc |> patrol |> List.isEmpty)
+    |> List.length
+    |> printfn "part2: %d"

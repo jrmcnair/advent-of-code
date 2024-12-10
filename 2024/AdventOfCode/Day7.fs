@@ -1,4 +1,6 @@
-﻿open System.IO
+﻿module Day7
+
+open System.IO
 open System.Text.RegularExpressions
 
 [<Struct>]
@@ -26,11 +28,12 @@ let testEquationV1 (equation: Equation) =
         ) []
     |> List.tryPick (fun x -> if x = equation.Result then Some equation.Result else None)
 
-input
-|> Seq.map testEquationV1
-|> Seq.choose id
-|> Seq.sum
-|> printfn "Part 1: %d"
+let part1 () =
+    input
+    |> Seq.map testEquationV1
+    |> Seq.choose id
+    |> Seq.sum
+    |> printfn "part1: %d"
 
 let testEquationV2 (equation: Equation) =
     equation.Numbers
@@ -41,8 +44,9 @@ let testEquationV2 (equation: Equation) =
         ) []
     |> List.tryPick (fun x -> if x = equation.Result then Some equation.Result else None)
 
-input
-|> Seq.map testEquationV2
-|> Seq.choose id
-|> Seq.sum
-|> printfn "Part 2: %d"
+let part2 () =
+    input
+    |> Seq.map testEquationV2
+    |> Seq.choose id
+    |> Seq.sum
+    |> printfn "part2: %d"
