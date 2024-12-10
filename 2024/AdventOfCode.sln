@@ -3,6 +3,12 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AdventOfCode.Tests", "Adven
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AdventOfCode", "AdventOfCode\AdventOfCode.fsproj", "{BAAB417B-E543-43A3-8783-E4614554B751}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{AF06B3A8-53BD-48A0-9E4A-E70917BD055E}"
+	ProjectSection(SolutionItems) = preProject
+		DayX.fs = DayX.fs
+		DayX.Tests.fs = DayX.Tests.fs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

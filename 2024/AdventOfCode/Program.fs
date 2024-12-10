@@ -1,9 +1,7 @@
-﻿open Day10
+﻿open Day11
 
-let input = System.IO.File.ReadAllLines "./Input/day10.txt"
+let input = "7568 155731 0 972 1 6919238 80646 22"
 
-part1(input)
+Part1.execute input 25
 |> printfn "part1: %d"
 
-part2(input)
-|> printfn "part2: %d"
