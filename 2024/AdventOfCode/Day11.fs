@@ -1,7 +1,6 @@
 ﻿module Day11
 
 open System
-open System.Collections.Generic
 
 let digitsAreEven (n: uint64) =
     n.ToString().Length % 2 = 0
@@ -11,35 +10,41 @@ let splitStone (stone: uint64) =
     let l = s.Length/2
     UInt64.Parse(s.Substring(0,l)), UInt64.Parse(s.Substring(l))
 
-module Part1 =
-    let parse (input: string) =
-        input.Split(" ")
-        |> Seq.choose (fun x -> Some (x |> string |> uint64))
-        |> LinkedList
+let parse (input: string) =
+    input.Split(" ")
+    |> Seq.choose (fun x -> Some (x |> string |> uint64))
+    |> Seq.groupBy id
+    |> Seq.map (fun (n, l) -> n, Seq.length l |> uint64)
+    |> Map.ofSeq
 
-    let blink (stones: LinkedList<uint64>) =
-        let rec execute (current: LinkedListNode<uint64>) =
-            if current.Value = 0UL then current.Value <- 1UL
-            else
-                if digitsAreEven current.Value then
-                    let (n1, n2) = splitStone current.Value
-            
-                    stones.AddBefore(current, LinkedListNode(n1))
-                    current.Value <- n2
-                else
-                    current.Value <- current.Value * 2024UL
+let blinkStone (stone: uint64) =
+    match stone with
+    | 0UL -> seq { 1UL }
+    | s when digitsAreEven s ->
+        let (s1, s2) = splitStone s
+        seq { s1; s2 }
+    | s -> seq { s * 2024UL }
 
-            if not (isNull current.Next) then execute current.Next
-            
-        execute stones.First
-        stones
+let blink (total: int) (start: Map<uint64, uint64>) =
+    let rec go (counter: int) (current: Map<uint64, uint64>) =
+        if counter <= total then
+            current
+            |> Seq.map(fun x -> blinkStone x.Key |> Seq.map (fun y -> (y, x.Value)))
+            |> Seq.concat
+            |> Seq.groupBy fst
+            |> Seq.map (fun (n, x) -> n, x |> Seq.map snd |> Seq.sum)
+            |> Map.ofSeq
+            |> go (counter + 1)
+        else
+            current
+    
+    go 1 start
 
-    let execute (input:string) (blinks: int) =
-        let initial = input |> parse
-        
-        for i = 1 to blinks do
-            blink initial |> ignore
+let execute (input:string) (blinkCount: int) =
+    let result = 
+        input
+        |> parse
+        |> blink blinkCount
+        |> Seq.map (fun x -> x.Value |> uint64)
 
-        initial.Count
-
-let part2 (input:string) = 0
+    result |> Seq.sum

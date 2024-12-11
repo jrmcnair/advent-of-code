@@ -1,57 +1,71 @@
 module Tests.Day11
 
-open System.Collections.Generic
 open Xunit
+open Day11
 
 let sample = "125 17"
 
-module Part1 =
-    open Day11.Part1
-    
-    [<Fact>]
-    let ``parse: two entries`` () =
-        let expected = [ 125UL; 17UL ] |> LinkedList
-        let actual = parse sample
+[<Fact>]
+let ``parse: two entries`` () =
+    let expected = Map [ (17UL, 1); (125UL, 1) ]
+    let actual = parse sample
 
-        Assert.Equivalent(expected, actual)
+    Assert.Equivalent(expected, actual)
 
-    [<Fact>]
-    let ``blink: rule 1 - 0 to 1`` () =
-        let stones = parse "0"
-        let expected = [ 1UL ] |> LinkedList
+[<Fact>]
+let ``parse: duplicate entry`` () =
+    let expected = Map [ (1UL, 2) ]
+    let actual = parse "1 1"
 
-        Assert.Equivalent(expected, blink stones)
+    Assert.Equivalent(expected, actual)
 
-    [<Fact>]
-    let ``blink: rule 2 - split if even # of digits`` () =
-        let stones = parse "2024"
-        let expected = [ 20UL; 24UL ] |> LinkedList
+[<Fact>]
+let ``blinkStone: rule 1 - 0 to 1`` () =
+    let expected = [ 1UL ]
+    Assert.Equivalent(expected, blinkStone 0UL)
 
-        Assert.Equivalent(expected, blink stones)
+[<Fact>]
+let ``blinkStone: rule 2 - split if even # of digits`` () =
+    let expected = [ 20UL; 24UL ]
+    Assert.Equivalent(expected, blinkStone 2024UL)
 
-    [<Fact>]
-    let ``blink: rule 2 - reduce zeros`` () =
-        let stones = parse "2000"
-        let expected = [ 20UL; 0UL ] |> LinkedList
+[<Fact>]
+let ``blinkStone: rule 2 - reduce zeros`` () =
+    let expected = [ 20UL; 0UL ]
+    Assert.Equivalent(expected, blinkStone 2000UL)
 
-        Assert.Equivalent(expected, blink stones)
+[<Fact>]
+let ``blinkStone: rule 3 - x 2024`` () =
+    let expected = [ 2024UL ]
+    Assert.Equivalent(expected, blinkStone 1UL)
 
-    [<Fact>]
-    let ``blink: rule 3 - x 2024`` () =
-        let stones = parse "1"
-        let expected = [ 2024UL ] |> LinkedList
+[<Fact>]
+let ``blink test`` () =
+    let expected = Map [ (1UL,1); (7UL,1); (253000UL,1) ]
+    let actual = parse sample |> blink 1
 
-        Assert.Equivalent(expected, blink stones)
+    Assert.Equivalent(expected, actual)
 
-    [<Fact>]
-    let ``blink: all rules`` () =
-        let stones = parse "0 1 10 99 999"
-        let expected = [ 1UL; 2024UL; 1UL; 0UL; 9UL; 9UL; 2021976UL ] |> LinkedList
+[<Fact>]
+let ``blink with duplicates`` () =
+    let expected = Map [ (2UL,2); (0UL,1); (4UL,1) ]
+    let actual = parse "20 24" |> blink 1
 
-        Assert.Equivalent(expected, blink stones)
+    Assert.Equivalent(expected, actual)
 
-    [<Theory>]
-    [<InlineData(6, 22)>]
-    [<InlineData(25, 55312)>]
-    let ``part1: sample`` (blinks: int, expected: int) =
-        Assert.Equal(expected, execute sample blinks)
+[<Fact>]
+let ``blink with overlaps`` () =
+    let expected = Map [ (2UL,2); (0UL,1); (4UL,1); (8096UL, 1) ]
+    let actual = parse "20 24 4" |> blink 1
+
+    Assert.Equivalent(expected, actual)
+
+[<Theory>]
+[<InlineData(1, 3UL)>]
+[<InlineData(2, 4UL)>]
+[<InlineData(3, 5UL)>]
+[<InlineData(4, 9UL)>]
+[<InlineData(5, 13UL)>]
+[<InlineData(6, 22UL)>]
+let ``execute gets correct count`` (blinks: int, expected: uint64) =
+    Assert.Equal(expected, execute sample blinks)
