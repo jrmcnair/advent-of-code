@@ -48,3 +48,12 @@ let execute (input:string) (blinkCount: int) =
         |> Seq.map (fun x -> x.Value |> uint64)
 
     result |> Seq.sum
+
+let run () =
+    let input = "7568 155731 0 972 1 6919238 80646 22"
+
+    execute input 25 
+    |> printfn "[Day 11] Part 1: %d"
+
+    execute input 75 
+    |> printfn "[Day 11] Part 2: %d"

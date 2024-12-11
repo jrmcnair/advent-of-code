@@ -1,5 +1,7 @@
 ﻿module Day10
 
+open System.IO
+
 type Node =
     | Height of int
     | Impassable
@@ -64,16 +66,21 @@ let getTrailCount (grid: Node[,]) (trailhead: int * int) =
     findPeaks grid trailhead
     |> Seq.length
 
-let part1 (input:string seq) =
-    let grid = input |> toGrid
-    
+let part1 grid =
     getTrailheads grid
     |> Seq.map (getPeakCount grid)
     |> Seq.sum
 
-let part2 (input:string seq) =
-    let grid = input |> toGrid
-    
+let part2 grid =
     getTrailheads grid
     |> Seq.map (getTrailCount grid)
     |> Seq.sum
+
+let run () =
+    let grid = File.ReadAllLines "./Input/day10.txt" |> toGrid
+
+    part1 grid
+    |> printfn "[Day 10] Part 1: %d"
+
+    part2 grid
+    |> printfn "[Day 10] Part 2: %d"

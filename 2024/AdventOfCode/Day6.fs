@@ -49,8 +49,6 @@ module Movement =
         then None
         else Some nxt
 
-let filename = "./Input/day6.txt"
-
 let loadData filename  =
     filename
     |> File.ReadLines
@@ -69,10 +67,7 @@ let findGuard (grid: Tile[][]) =
     |> Array.find Option.isSome
     |> Option.get
 
-let grid = filename |> loadData
-let start = findGuard grid
-
-let patrol (grid:Tile[][]) =
+let patrol (start: Coord) (grid:Tile[][]) =
     let rec go (loc:Coord) (dir: Direction) (seen: (Coord * Direction) list) =
         if seen |> List.contains (loc, dir)
         then []
@@ -87,14 +82,11 @@ let patrol (grid:Tile[][]) =
     
     go start North []
 
-let tilesGuarded = patrol grid
-
 // -- part 1 -------------------------------------------------------------------
 
-let part1 () =
+let part1 (tilesGuarded: Coord list) =
     tilesGuarded
     |> List.length
-    |> printfn "part1: %d"
 
 // -- part 2 -------------------------------------------------------------------
 
@@ -103,9 +95,19 @@ let getGridWithNewObstacle (grid: Tile[][]) (loc: Coord) =
 
 let startTime = DateTime.Now
 
-let part2 () =
+let part2 grid start tilesGuarded =
     tilesGuarded
     |> List.filter (fun loc -> loc <> start)
-    |> List.filter (fun loc -> getGridWithNewObstacle grid loc |> patrol |> List.isEmpty)
+    |> List.filter (fun loc -> getGridWithNewObstacle grid loc |> patrol start |> List.isEmpty)
     |> List.length
-    |> printfn "part2: %d"
+
+let run () =
+    let grid = loadData "./Input/day6.txt"
+    let start = findGuard grid
+    let tilesGuarded = patrol start grid
+
+    part1 tilesGuarded
+    |> printfn "[Day 6] Part 1: %d"
+
+    part2 grid start tilesGuarded
+    |> printfn "[Day 6] Part 2: %d"

@@ -70,7 +70,9 @@ let ``part1: score of 0 (no trailheads)`` () =
 1234
 8765
 9876")
-    Assert.Equal(0, part1 input)
+    let grid = input |> toGrid
+
+    Assert.Equal(0, part1 grid)
 
 [<Fact>]
 let ``part1: score of 0 (no peaks)`` () =
@@ -78,7 +80,9 @@ let ``part1: score of 0 (no peaks)`` () =
 1234
 8765
 .876")
-    Assert.Equal(0, part1 input)
+    let grid = input |> toGrid
+
+    Assert.Equal(0, part1 grid)
 
 [<Fact>]
 let ``part1: score of 1 (single trailhead)`` () =
@@ -86,7 +90,9 @@ let ``part1: score of 1 (single trailhead)`` () =
 1234
 8765
 9876")
-    Assert.Equal(1, part1 input)
+    let grid = input |> toGrid
+
+    Assert.Equal(1, part1 grid)
 
 [<Fact>]
 let ``part1: score of 2 (single trailhead)`` () =
@@ -97,8 +103,9 @@ let ``part1: score of 2 (single trailhead)`` () =
 7.....7
 8.....8
 9.....9")
+    let grid = input |> toGrid
 
-    Assert.Equal(2, part1 input)
+    Assert.Equal(2, part1 grid)
 
 [<Fact>]
 let ``part1: score of 4 (single trailhead)`` () =
@@ -109,8 +116,9 @@ let ``part1: score of 4 (single trailhead)`` () =
 765.987
 876....
 987....")
+    let grid = input |> toGrid
 
-    Assert.Equal(4, part1 input)
+    Assert.Equal(4, part1 grid)
 
 [<Fact>]
 let ``part1: score of 3 (two trailheads)`` () =
@@ -121,8 +129,9 @@ let ``part1: score of 3 (two trailheads)`` () =
 ...8..3
 ...9..2
 .....01")
+    let grid = input |> toGrid
 
-    Assert.Equal(3, part1 input)
+    Assert.Equal(3, part1 grid)
 
 [<Fact>]
 let ``part1: sample`` () =
@@ -134,8 +143,9 @@ let ``part1: sample`` () =
 32019012
 01329801
 10456732")
+    let grid = input |> toGrid
 
-    Assert.Equal(36, part1 input)
+    Assert.Equal(36, part1 grid)
 
 [<Fact>]
 let ``part2: single trailhead = 3`` () =
@@ -146,8 +156,9 @@ let ``part2: single trailhead = 3`` () =
 ..7..4.
 ..8765.
 ..9....")
+    let grid = input |> toGrid
 
-    Assert.Equal(3, part2 input)
+    Assert.Equal(3, part2 grid)
 
 [<Fact>]
 let ``part2: single trailhead = 13`` () =
@@ -158,8 +169,9 @@ let ``part2: single trailhead = 13`` () =
 765.987
 876....
 987....")
+    let grid = input |> toGrid
 
-    Assert.Equal(13, part2 input)
+    Assert.Equal(13, part2 grid)
 
 [<Fact>]
 let ``part2: single trailhead = all!`` () =
@@ -169,8 +181,9 @@ let ``part2: single trailhead = all!`` () =
 345678
 4.6789
 56789.")
+    let grid = input |> toGrid
 
-    Assert.Equal(227, part2 input)
+    Assert.Equal(227, part2 grid)
 
 [<Fact>]
 let ``part2: sample`` () =
@@ -182,6 +195,7 @@ let ``part2: sample`` () =
 32019012
 01329801
 10456732")
+    let grid = input |> toGrid
 
-    Assert.Equal(81, part2 input)
+    Assert.Equal(81, part2 grid)
 

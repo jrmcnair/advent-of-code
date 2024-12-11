@@ -15,10 +15,6 @@ let parse (line:string) =
     let numbers = (Seq.tail matches) |> Seq.map (fun x -> x.Value |> int64) |> Array.ofSeq
     Equation(result, numbers)
     
-let input =
-    File.ReadAllLines "input.txt"
-    |> Seq.map parse
-
 let testEquationV1 (equation: Equation) =
     equation.Numbers
     |> Array.fold (fun current next ->
@@ -28,12 +24,11 @@ let testEquationV1 (equation: Equation) =
         ) []
     |> List.tryPick (fun x -> if x = equation.Result then Some equation.Result else None)
 
-let part1 () =
+let part1 input =
     input
     |> Seq.map testEquationV1
     |> Seq.choose id
     |> Seq.sum
-    |> printfn "part1: %d"
 
 let testEquationV2 (equation: Equation) =
     equation.Numbers
@@ -44,9 +39,20 @@ let testEquationV2 (equation: Equation) =
         ) []
     |> List.tryPick (fun x -> if x = equation.Result then Some equation.Result else None)
 
-let part2 () =
+let part2 input =
     input
     |> Seq.map testEquationV2
     |> Seq.choose id
     |> Seq.sum
-    |> printfn "part2: %d"
+
+let run () =
+    let input =
+        File.ReadAllLines "./Input/day7.txt"
+        |> Seq.map parse
+
+
+    part1 input
+    |> printfn "[Day 7] Part 1: %d"
+
+    part2 input
+    |> printfn "[Day 7] Part 2: %d"

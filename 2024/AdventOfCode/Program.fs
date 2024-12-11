@@ -1,7 +1,11 @@
-﻿open Day11
-
-let input = "7568 155731 0 972 1 6919238 80646 22"
-
-execute input 75
-|> printfn "part1: %d"
-
+﻿// Day1.run()
+// Day2.run()
+// Day3.run()
+// Day4.run()
+// Day5.run()
+// Day6.run()
+// Day7.run()
+// Day8.run()
+// Day9.run()
+// Day10.run()
+// Day11.run()

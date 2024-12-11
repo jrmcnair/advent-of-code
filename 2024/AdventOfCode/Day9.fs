@@ -1,5 +1,7 @@
 ﻿module Day9
 
+open System.IO
+
 let diskMap (input: string) =
     input
     |> _.ToCharArray()
@@ -48,7 +50,7 @@ module Part1 =
             | Free -> None)
         |> Seq.sum
 
-    let part1 (input: string) =
+    let run (input: string) =
         diskMap input
         |> Seq.mapi toBlocks
         |> Seq.concat
@@ -111,9 +113,18 @@ module Part2 =
         |> Seq.mapi (fun i n -> int64 i * int64 n)
         |> Seq.sum
 
-    let part2 (input: string) =
+    let run (input: string) =
         diskMap input
         |> Seq.mapi toBlocks
         |> Seq.concat
         |> compressByFile
         |> checksum
+
+let run () =
+    let input = File.ReadAllLines "./Input/day9.txt" |> Seq.head
+
+    Part1.run input
+    |> printfn "[Day 9] Part 1: %d"
+
+    Part2.run input
+    |> printfn "[Day 9] Part 2: %d"
