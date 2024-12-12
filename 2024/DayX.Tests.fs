@@ -20,7 +20,6 @@ let ``part1: sample`` () =
     Assert.Fail "Not Implemented"
     Assert.Equal(expected, part1 input)
 
-
 [<Fact>]
 let ``part2: sample`` () =
     let input = loadInput ""
