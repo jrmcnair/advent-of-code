@@ -23,96 +23,75 @@ Prize: X=18641, Y=10279"
 let loadInput (raw: string) =
     raw.Split Environment.NewLine
 
-module ClawMachine =
+module CreateTests =
 
     [<Fact>]
-    let ``create: button A Efficient`` () =
+    let ``create`` () =
         let expected =
-          { ButtonA = (4,4)
-            ButtonB = (1,1)
-            EfficientButton = A
-            PrizeLocation = (200, 100)
-            MaxIterations = 201 }
-        let actual = ClawMachine.create (4,4) (1,1) (200, 100)
+          { A = (4L,4L)
+            B = (1L,1L)
+            Prize = (200L, 100L) }
+        let actual = Machine.create false (4,4) (1,1) (200, 100)
 
         Assert.Equivalent(expected, actual)
 
-    [<Fact>]
-    let ``create: button B Efficient`` () =
-        let expected =
-          { ButtonA = (2,2)
-            ButtonB = (1,1)
-            EfficientButton = B
-            PrizeLocation = (200, 100)
-            MaxIterations = 201 }
-        let actual = ClawMachine.create (2,2) (1,1) (200, 100)
-
-        Assert.Equivalent(expected, actual)
-
-module Parse =
+module ParseTests =
 
     [<Fact>]
     let ``single line`` () =
         let input = loadInput sample |> Seq.take 4
         let expected = [
-            ClawMachine.create (94,34) (22,67) (8400,5400)
+            Machine.create false (94,34) (22,67) (8400,5400)
         ]
 
-        Assert.Equivalent(expected, input |> parse)
+        Assert.Equivalent(expected, input |> parse false)
 
     [<Fact>]
     let ``multiple lines`` () =
         let expected = [
-            ClawMachine.create (94,34) (22,67) (8400,5400)
-            ClawMachine.create (26,66) (67,21) (12748,12176)
-            ClawMachine.create (17,86) (84,37) (7870,6450)
-            ClawMachine.create (69,23) (27,71) (18641,10279)
+            Machine.create false (94,34) (22,67) (8400,5400)
+            Machine.create false (26,66) (67,21) (12748,12176)
+            Machine.create false (17,86) (84,37) (7870,6450)
+            Machine.create false (69,23) (27,71) (18641,10279)
         ]
 
-        Assert.Equivalent(expected, loadInput sample |> parse)
+        Assert.Equivalent(expected, loadInput sample |> parse false)
 
-module tokensToPrize =
-
-    [<Fact>]
-    let ``can get to price with efficient button only`` () =
-        let machine = ClawMachine.create (4,4) (1,1) (8,8)
-        let expected = 6
-
-        Assert.Equal(expected, tokensToPrize machine)
+module SolveTests =
 
     [<Fact>]
-    let ``can get to price with inefficient button only`` () =
-        let machine = ClawMachine.create (1,1) (4,4) (8,8)
-        let expected = 2
+    let ``unsolvable`` () =
+        let machine = Machine.create false (2,2) (3,3) (1,1)
+        let expected = None
 
-        Assert.Equal(expected, tokensToPrize machine)
-
+        Assert.Equal(expected, solve machine)
+    
     [<Fact>]
-    let ``must use a mix`` () =
-        let machine = ClawMachine.create (4,4) (1,1) (9,9)
-        let expected = 7
-
-        Assert.Equal(expected, tokensToPrize machine)
+    let ``simple test`` () =
+        let machine = Machine.create false (1,3) (25,25) (2,6)
+        let expected = Some 6L
+    
+        Assert.Equal(expected, solve machine)
 
     [<Fact>]
     let ``sample machine 1`` () =
-        let machine = ClawMachine.create (94,34) (22,67) (8400, 5400)
-        let expected = 280
+        let machine = Machine.create false (94,34) (22,67) (8400, 5400)
+        let expected = Some 280L
 
-        Assert.Equal(expected, tokensToPrize machine)
+        Assert.Equal(expected, solve machine)
 
-module Parts =
+module PartTests =
 
     [<Fact>]
     let ``part1: sample`` () =
         let input = loadInput sample
-        let expected = 480
+        let expected = 480L
 
         Assert.Equal(expected, part1 input)
 
     [<Fact>]
     let ``part2: sample`` () =
         let input = loadInput ""
-        let expected = 0
+        let expected = 0L
 
         Assert.Equal(expected, part2 input)
