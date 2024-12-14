@@ -4,6 +4,8 @@ open System
 open Xunit
 open Day?
 
+let sample = ""
+
 let loadInput (raw: string) =
     raw.Split(Environment.NewLine)
 
@@ -14,7 +16,7 @@ let ``scratchpad`` () =
 
 [<Fact>]
 let ``part1: sample`` () =
-    let input = loadInput ""
+    let input = loadInput sample
     let expected = 0
 
     Assert.Fail "Not Implemented"
@@ -22,7 +24,7 @@ let ``part1: sample`` () =
 
 [<Fact>]
 let ``part2: sample`` () =
-    let input = loadInput ""
+    let input = loadInput sample
     let expected = 0
 
     Assert.Fail "Not Implemented"
