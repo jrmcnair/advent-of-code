@@ -1,6 +1,5 @@
 ﻿module Day13
 
-open System
 open System.IO
 open System.Text.RegularExpressions
 
@@ -18,7 +17,6 @@ module Machine =
         
         { A = (ax,ay); B = (bx,by); Prize = (plx,ply) }
 
-
 let parse (isPart2: bool) (input: string seq) =
     let parseLine (line: string) =
         let matches = Regex.Matches(line, "(\d+)") |> Seq.map (fun x -> int x.Value) |> Array.ofSeq
@@ -26,7 +24,6 @@ let parse (isPart2: bool) (input: string seq) =
         
     input |> Seq.filter (fun s -> s <> "") |> Seq.chunkBySize 3 |> Seq.map(fun x ->
         Machine.create isPart2 (parseLine x[0]) (parseLine x[1]) (parseLine x[2]) )
-
 
 let solve (m: Machine) : int64 option =
     let ax, ay = m.A
