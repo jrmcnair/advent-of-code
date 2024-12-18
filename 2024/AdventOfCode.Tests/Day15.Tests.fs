@@ -3,7 +3,7 @@ module Tests.Day15
 open System
 open System.Collections.Generic
 open Xunit
-open AdventOfCode.Solutions.Common
+open AdventOfCode.Common
 
 let sample = "########
 #..O.O.#

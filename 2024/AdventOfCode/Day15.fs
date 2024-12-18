@@ -2,7 +2,7 @@
 
 open System.Collections.Generic
 open System.IO
-open AdventOfCode.Solutions.Common
+open AdventOfCode.Common
 
 module Part1 =
 
@@ -81,7 +81,7 @@ module Part1 =
 
     let execute (input:string seq) =
         let warehouse, moves = parse input
-        let start = warehouse |> Array2D.findIndex Tile.Robot |> Loc.ofInt
+        let start = warehouse |> Array2D.findIndex Tile.Robot |> Loc.ofTuple
         //warehouse[start] <- Empty // can do this if it gets ugly
         
         move warehouse moves start
@@ -229,7 +229,7 @@ module Part2 =
 
     let execute (input:string seq) =
         let warehouse, moves = parse input
-        let start = warehouse |> Array2D.findIndex Tile.Robot |> Loc.ofInt
+        let start = warehouse |> Array2D.findIndex Tile.Robot |> Loc.ofTuple
         warehouse[start.Row, start.Col] <- Empty
         
         move warehouse moves start

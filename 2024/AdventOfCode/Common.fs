@@ -1,4 +1,6 @@
-namespace AdventOfCode.Solutions.Common
+namespace AdventOfCode.Common
+
+// TODO: Add common/generic code for Dijkstra, DFS and BFS searches in a Searches.fs file?
 
 module Array2D =
 
@@ -19,10 +21,34 @@ module Array2D =
             elif a2d.[row,col] = v then Some (row,col)
             else go row (col + 1)
         go 0 0
+        
+    let ofChars (f: char -> 'T) (input: string seq) =
+        input |> Seq.map (Seq.map f) |> array2D
 
 [<Struct>]
 type Loc = { Row: int; Col: int }
 module Loc =
     let create (row: int) (col: int) = { Row = row; Col = col }
-    let ofInt (row: int, col:int) = create row col
-    let toInt (loc: Loc) = loc.Row, loc.Col
+    let ofTuple (row: int, col:int) = create row col
+    let toTuple (loc: Loc) = loc.Row, loc.Col
+
+[<Struct>]
+type Direction = | N | S | E | W
+module Direction =
+    let next (loc: Loc) = function
+        | N -> { loc with Row = loc.Row - 1 }
+        | S -> { loc with Row = loc.Row + 1 }
+        | E -> { loc with Col = loc.Col + 1 }
+        | W -> { loc with Col = loc.Col - 1 }
+
+    let turnLeft = function
+        | N -> W
+        | S -> E
+        | E -> N
+        | W -> S
+
+    let turnRight = function
+        | N -> E
+        | S -> W
+        | E -> S
+        | W -> N
