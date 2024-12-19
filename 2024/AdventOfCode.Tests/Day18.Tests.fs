@@ -59,6 +59,15 @@ let ``compute memoryState`` () =
 let ``part1: sample`` () =
     let coords = loadInput sample |> parse
     let grid = memoryState coords sampleSize sampleTicks
-    let expected = 22
+    let expected = Some 22
     
-    Assert.Equal(expected, findShortestPath grid sampleSize)
+    Assert.Equal(expected, shortestPath sampleSize grid)
+
+
+[<Fact>]
+let ``part2: sample`` () =
+    let coords = loadInput sample |> parse |> List.ofSeq
+    let size = 6
+    let expected = (6,1)
+    
+    Assert.Equal(expected, findBlockingCoord coords size)
