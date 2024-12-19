@@ -1,6 +1,6 @@
 namespace AdventOfCode.Common
 
-// TODO: Add common/generic code for Dijkstra, DFS and BFS searches in a Searches.fs file?
+// TODO: Add examples for searches like Dijkstra, DFS and BFS searches in a Searches.fs file?
 
 module Array2D =
 

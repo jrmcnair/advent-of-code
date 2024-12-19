@@ -43,18 +43,46 @@ grgrgr"
         Assert.Equivalent(expectedPatterns, patterns)
         Assert.Equivalent(expectedDesigns, designs)
 
-module IsPossible =
+module Part1 =
     
     [<Theory>]
-    [<InlineData("brwrr", true)>]
-    [<InlineData("bggr", true)>]
-    [<InlineData("gbbr", true)>]
-    [<InlineData("rrbgbr", true)>]
-    [<InlineData("ubwu", false)>]
-    [<InlineData("bwurrg", true)>]
-    [<InlineData("brgr", true)>]
-    [<InlineData("bbrgwb", false)>]
-    let ``isPossible returns correct values`` (design: string, expected: bool) =
+    [<InlineData("brwrr", 1)>]
+    [<InlineData("bggr", 1)>]
+    [<InlineData("gbbr", 1)>]
+    [<InlineData("rrbgbr", 1)>]
+    [<InlineData("ubwu", 0)>]
+    [<InlineData("bwurrg", 1)>]
+    [<InlineData("brgr", 1)>]
+    [<InlineData("bbrgwb", 0)>]
+    let ``part1 for each design in sample individually`` (design: string, expected: int) =
         let patterns = [ "r"; "wr"; "b"; "g"; "bwu"; "rb"; "gb"; "br" ]
-        Assert.Equal(expected, isPossible patterns design)
+        Assert.Equal(expected, part1 patterns [ design ])
 
+    [<Fact>]
+    let ``part1 with sample input`` () =
+        let patterns, designs = sample.Split(Environment.NewLine) |> parse
+        let expected = 6
+        
+        Assert.Equal(expected, part1 patterns designs)
+
+module Part2 =
+    
+    [<Theory>]
+    [<InlineData("brwrr", 2L)>]
+    [<InlineData("bggr", 1L)>]
+    [<InlineData("gbbr", 4L)>]
+    [<InlineData("rrbgbr", 6L)>]
+    [<InlineData("ubwu", 0L)>]
+    [<InlineData("bwurrg", 1L)>]
+    [<InlineData("brgr", 2L)>]
+    [<InlineData("bbrgwb", 0L)>]
+    let ``part2 for each design individually`` (design: string, expected: int64) =
+        let patterns = [ "r"; "wr"; "b"; "g"; "bwu"; "rb"; "gb"; "br" ]
+        Assert.Equal(expected, part2 patterns [ design ])
+
+    [<Fact>]
+    let ``part2 with full sample`` () =
+        let patterns, designs = sample.Split(Environment.NewLine) |> parse
+        let expected = 16L
+        
+        Assert.Equal(expected, part2 patterns designs)
