@@ -3,7 +3,6 @@ namespace AdventOfCode.Common
 // TODO: Add examples for searches like Dijkstra, DFS and BFS searches in a Searches.fs file?
 
 module Array2D =
-
     let findIndex (v:'T) (a2d: 'T[,]) =
         let maxCol = (a2d |> Array2D.length2) - 1
         let rec go row col =
@@ -21,7 +20,12 @@ module Array2D =
             elif a2d.[row,col] = v then Some (row,col)
             else go row (col + 1)
         go 0 0
-        
+
+    let tryGet (row: int, col: int) (a2d: 'T[,]) =
+        if row < 0 || row >= Array2D.length1 a2d then None
+        elif col < 0 || col >= Array2D.length2 a2d then None
+        else Some a2d[row, col]
+
     let ofChars (f: char -> 'T) (input: string seq) =
         input |> Seq.map (Seq.map f) |> array2D
 
