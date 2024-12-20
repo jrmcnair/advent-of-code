@@ -16,8 +16,8 @@ module Tile =
         | _ -> Empty
 
 let parse (input: string seq) = input |> Array2D.ofChars Tile.ofChar
-let getStart (maze: Tile[,]) = maze |> Array2D.findIndex Start |> Loc.ofTuple
-let getEnd (maze: Tile[,]) = maze |> Array2D.findIndex End |> Loc.ofTuple
+let getStart (maze: Tile[,]) = maze |> Array2D.findIndex (fun x -> x = Start) |> Loc.ofTuple
+let getEnd (maze: Tile[,]) = maze |> Array2D.findIndex (fun x -> x = End) |> Loc.ofTuple
 
 type Id = Loc * Direction * HashSet<Loc>
 

@@ -1,33 +1,43 @@
 namespace AdventOfCode.Common
 
+open System.Collections.Generic
+
 // TODO: Add examples for searches like Dijkstra, DFS and BFS searches in a Searches.fs file?
 
 module Array2D =
-    let findIndex (v:'T) (a2d: 'T[,]) =
+    let findIndex (predicate: 'T -> bool) (a2d: 'T[,]) =
+        let maxRow = (a2d |> Array2D.length1) - 1
         let maxCol = (a2d |> Array2D.length2) - 1
         let rec go row col =
+            if row > maxRow then raise (KeyNotFoundException())
             if col > maxCol then go (row + 1) 0
-            elif a2d.[row,col] = v then (row,col)
+            elif predicate a2d.[row,col] then (row,col)
             else go row (col + 1)
         go 0 0
 
-    let tryFindIndex (v:'T) (a2d: 'T[,]) = 
+    let tryFindIndex (predicate: 'T -> bool) (a2d: 'T[,]) = 
         let maxRow = (a2d |> Array2D.length1) - 1
         let maxCol = (a2d |> Array2D.length2) - 1
         let rec go row col =
             if row > maxRow then None
             elif col > maxCol then go (row + 1) col
-            elif a2d.[row,col] = v then Some (row,col)
+            elif predicate a2d.[row,col] then Some (row, col)
             else go row (col + 1)
         go 0 0
 
+    let isValid (a2d: 'T[,]) (row: int, col: int) =
+        row >= 0 && row < Array2D.length1 a2d
+        && col >= 0 && col < Array2D.length2 a2d
+        
     let tryGet (row: int, col: int) (a2d: 'T[,]) =
-        if row < 0 || row >= Array2D.length1 a2d then None
-        elif col < 0 || col >= Array2D.length2 a2d then None
-        else Some a2d[row, col]
+        if isValid a2d (row,col) then Some a2d[row, col] else None
 
     let ofChars (f: char -> 'T) (input: string seq) =
         input |> Seq.map (Seq.map f) |> array2D
+
+    let cardinalNeighbors (row:int, col:int) (a2d:'T[,]) =
+        [(row - 1, col); (row + 1, col); (row, col - 1); (row, col + 1)]
+        |> Seq.choose (fun (r, c) -> tryGet (r,c) a2d |> Option.map (fun v -> (r, c), v))
 
 [<Struct>]
 type Loc = { Row: int; Col: int }
