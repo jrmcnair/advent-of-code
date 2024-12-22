@@ -1,6 +1,7 @@
 ﻿// https://adventofcode.com/2024/day/21
 module Day21
 
+open System.Collections.Concurrent
 open System.Collections.Generic
 open AdventOfCode.Common
 
@@ -44,48 +45,65 @@ let remoteCommands (curr: Coord) (next: Coord) =
         elif diff.X < 0 && diff.Y < 0 then horz + vert // up/left
         elif diff.X < 0 && diff.Y > 0 then horz + vert // down/left
         else vert + horz // down/right or up/right
-
+    
     cmds + "A"
 
 let getKeypadCommands (buttons: string)=
-    let rec toRobot (current: char) (remaining: string) (commands: string) =
-        let next = Seq.head remaining
-        let newCmds = commands + keypadCommands keypad[current] keypad[next]
-                        
-        if remaining.Length = 1 then newCmds
-        else toRobot next (remaining.Substring(1)) newCmds
+    "A" + buttons
+    |> Seq.pairwise
+    |> Seq.map (fun (curr, next) -> keypadCommands keypad[curr] keypad[next])
+    |> String.concat ""
 
-    toRobot 'A' buttons ""
-
-let getRemoteCommands (buttons: string) =
-    let rec toRobot (current: char) (remaining: string) (commands: string) =
-        let next = Seq.head remaining
-        let newCmds = commands + remoteCommands remote[current] remote[next]
-                        
-        if remaining.Length = 1 then newCmds
-        else toRobot next (remaining.Substring(1)) newCmds
-
-    toRobot 'A' buttons ""
-
-let pushButtons (numRobots: int) (buttons: string) =
-    let rec robotChain (robotsRemaining: int) (input: string) =
-        if robotsRemaining = 0 then input
-        else
-            getRemoteCommands input
-            |> robotChain (robotsRemaining - 1)
+// this is not part of the solution, but was needed to see the output for testing
+let getRemoteCommand (numRobots: int) (keypadButtonsToPush: string) =
+    let rec depthFirstSearch (buttons: string) (robot: int) (commands: string) =
+        "A" + buttons
+        |> Seq.toList
+        |> List.pairwise
+        |> List.map (fun (curr, next) ->
+            let newCmds = remoteCommands remote[curr] remote[next]
+            if robot = numRobots then commands + newCmds
+            else depthFirstSearch newCmds (robot + 1) (commands + newCmds))
+        |> String.concat ""
     
-    robotChain numRobots buttons
-   
-let complexity (code: string) (cmds: string) =
-   int (code.Substring(0,3)) * cmds.Length
+    depthFirstSearch keypadButtonsToPush 1 ""
+
+let getRemoteCommandLength (numRobots: int) (keypadButtonsToPush: string) =
+    let cache = Dictionary<char * char * int, int64>()
+
+    let rec depthFirstSearch (buttons: string) (robot: int) (total: int64) =
+        let cmdLength =
+            "A" + buttons
+            |> Seq.toList
+            |> List.pairwise
+            |> List.map (fun (curr, next) ->
+                let cacheKey = curr, next, robot
+                if cache.ContainsKey(cacheKey) then cache[cacheKey]
+                else
+                    let commands = remoteCommands remote[curr] remote[next]
+                    let count =
+                        if robot = numRobots then int64 commands.Length
+                        else depthFirstSearch commands (robot + 1) total
+
+                    cache.Add(cacheKey, count)
+                    count)
+            |> List.sum
+
+        total + cmdLength
+    
+    depthFirstSearch keypadButtonsToPush 1 0
+
+let complexity (code: string) (cmdLength: int64) =
+   int64 (code.Substring(0,3)) * cmdLength
 
 let solve (numRobots: int) (codes: string list)=
     codes
-    |> Seq.map (fun code ->
+    |> List.map (fun code ->
         getKeypadCommands code
-        |> pushButtons numRobots
+        |> getRemoteCommandLength numRobots
         |> complexity code)
-    |> Seq.sum
+
+    |> List.sum
 
 let codes = ["869A"; "170A"; "319A"; "349A"; "489A"]
 
@@ -95,4 +113,4 @@ let part1 () =
 
 let part2 () =
     solve 25 codes
-    |> printfn "[Day 21] Part 2: %d"
+    |> printfn "[Day 21] Part 2: %d" // 191139369248202
