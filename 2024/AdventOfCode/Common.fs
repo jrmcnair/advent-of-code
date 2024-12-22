@@ -4,6 +4,16 @@ open System.Collections.Generic
 
 // TODO: Add examples for searches like Dijkstra, DFS and BFS searches in a Searches.fs file?
 
+type Coord(x: int, y: int) =
+    member this.X = x
+    member this.Y = y
+
+    static member (+) (c1: Coord, c2: Coord) = Coord(c1.X + c2.X, c1.Y + c2.Y)
+    static member (-) (c1: Coord, c2: Coord) = Coord(c1.X - c2.X, c1.Y - c2.Y)
+
+    member this.Distance (other: Coord) = abs (other.X - this.X) + abs(other.Y - this.Y)
+    override this.ToString() = $"(%d{this.X}, %d{this.Y})"
+
 module Array2D =
     let findIndex (predicate: 'T -> bool) (a2d: 'T[,]) =
         let maxRow = (a2d |> Array2D.length1) - 1
