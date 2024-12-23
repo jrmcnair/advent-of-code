@@ -80,3 +80,28 @@ module GetSecret =
     [<InlineData(2024L, 8667524L)>]
     let ``sample entries at 2000 iterations`` (initial: int64, expected: int64) =
         Assert.Equal(expected, getSecret 2000 initial)
+
+module Price =
+    
+    [<Theory>]
+    [<InlineData(123L, 3)>]
+    [<InlineData(15887950L, 0)>]
+    [<InlineData(16495136L, 6)>]
+    [<InlineData(527345L, 5)>]
+    let ``example prices from 123 secrets`` (secret: int64, expected: int) =
+        Assert.Equal(expected, price secret)
+    
+    [<Fact>]
+    let ``getPrices from 4 itersations of secret 123`` () =
+        let secret = 123L
+        let expected = [| 3; 0; 6; 5 |]
+
+        Assert.Equivalent(expected, getPrices 4 secret)
+    
+    [<Fact>]
+    let ``getPriceChangesfrom 4 itersations of secret 123`` () =
+        let secret = 123L
+        let prices = getPrices 4 secret
+        let expected = [| (0, -3); (6, 6); (5, -1) |]
+        
+        Assert.Equivalent(expected, getPriceChanges prices)
