@@ -4,8 +4,7 @@ open System
 open Xunit
 open Day22
 
-let loadInput (raw: string) =
-    raw.Split(Environment.NewLine)
+let loadInput (raw: string) = raw.Split(Environment.NewLine)
 
 let sample = "1
 10

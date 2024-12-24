@@ -1,7 +1,6 @@
 ﻿// https://adventofcode.com/2024/day/21
 module Day21
 
-open System.Collections.Concurrent
 open System.Collections.Generic
 open AdventOfCode.Common
 
