@@ -47,7 +47,7 @@ let ``parse sample`` () =
     Assert.Equivalent(expected, actual[0..4])
 
 [<Fact>]
-let ``connections sample`` () =
+let ``toGraph sample`` () =
     let pairs = [ "a", "b"; "b", "c"; "a", "c" ]
     let expected = dict [
         "a", HashSet([ "b"; "c" ])
@@ -55,19 +55,19 @@ let ``connections sample`` () =
         "c", HashSet([ "a" ])
     ]
 
-    Assert.Equivalent(expected, connections pairs)
+    Assert.Equivalent(expected, toGraph pairs)
 
 [<Fact>]
 let ``find triangles with simple data`` () =
     let pairs = [ "ta", "aa"; "aa", "ab"; "ta", "ab" ]
-    let links = connections pairs 
+    let links = toGraph pairs 
     let expected = [ set [ "aa"; "ab"; "ta" ] ]
     
     Assert.Equivalent(expected, triangles links)
     
 [<Fact>]
 let ``find triangles with sample data`` () =
-    let links = sample |> loadInput |> parse |> connections 
+    let links = sample |> loadInput |> parse |> toGraph 
     let expected = [
         set [ "co"; "de"; "ta" ]
         set [ "co"; "ka"; "ta" ]
