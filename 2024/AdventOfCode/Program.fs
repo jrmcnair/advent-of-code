@@ -1,5 +1,5 @@
 ﻿open System
-open Day24
+open Day25
 
 let startTime = DateTime.Now
 
