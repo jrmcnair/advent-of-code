@@ -104,16 +104,20 @@ let ``logicGate with XOR operations`` (in1: int, in2: int, expected: int) =
     Assert.Equal(expected, logicGate (in1, in2) XOR)
 
 [<Fact>]
-let `` solve sample 1`` () =
+let `` process Gates and get number for "z" using sample 1`` () =
     let wireState, gates = parse sample1
     let expected = 4L
     
-    Assert.Equal(expected, solve wireState gates)
+    run wireState gates
+    
+    Assert.Equal(expected, toNumber wireState "z")
 
 [<Fact>]
-let `` solve sample 2`` () =
+let `` process Gates and get number for "z" using sample 2`` () =
     let wireState, gates = parse sample2
     let expected = 2024L
     
-    Assert.Equal(expected, solve wireState gates)
+    run wireState gates
+    
+    Assert.Equal(expected, toNumber wireState "z")
 
