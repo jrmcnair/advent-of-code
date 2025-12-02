@@ -3,8 +3,8 @@
 open System.IO
 
 type IdRange = {
-    Start: int
-    End: int
+    Start: int64
+    End: int64
 }
 
 // TODO: when to convert them to int?
@@ -12,7 +12,7 @@ let parseData (input: string) : IdRange[] =
     input.Split(",", System.StringSplitOptions.RemoveEmptyEntries)
     |> Array.map (fun input ->
         let parts = input.Split("-")
-        { Start = int parts.[0]; End = int parts.[1] })
+        { Start = int64 parts.[0]; End = int64 parts.[1] })
 
 let data : IdRange[] =
     "./input/day2.txt"
@@ -20,27 +20,27 @@ let data : IdRange[] =
     |> parseData
 
 module Part1 =
-    let isInvalidProductId (productId: int): bool =
+    let isInvalidProductId (productId: int64): int64 option =
         let stringDigits = productId.ToString()
         let numDigits = stringDigits.Length
         
         if numDigits % 2 = 1 then
-            false
+            None
         else
             let left = stringDigits.Substring(0, numDigits / 2)
             let right = stringDigits.Substring(numDigits / 2, numDigits / 2)
-            left = right
+            if left = right then
+                Some productId
+            else
+                None
     
-    let processRange (range: IdRange) : Set<int> =
-
-        //if number of digits is odd, can't be invalid
-        set []
-
-    let getInvalidIds (ranges: IdRange[]): Set<int> =
-        set []
+    let processRange (range: IdRange) =
+        seq {range.Start..range.End}
+        |> Seq.choose isInvalidProductId
+        |> Seq.fold (+) 0L
 
     let run () =
         data
-        |> getInvalidIds
-        |> Set.fold(+) 0
+        |> Array.map processRange
+        |> Array.sum
         |> printfn "Part1: Sum of Invalid Ids = %d"

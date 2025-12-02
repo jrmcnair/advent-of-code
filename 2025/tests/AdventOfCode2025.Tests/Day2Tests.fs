@@ -9,12 +9,25 @@ module Part1 =
     open Part1
     
     [<Theory>]
-    [<InlineData(11, true)>]
-    [<InlineData(12, false)>]
-    [<InlineData(1010, true)>]
-    [<InlineData(1221, false)>]
-    [<InlineData(123456, false)>]
-    [<InlineData(999999, true)>]
-    let ``isInvalidProductId is Correct`` (productId: int, isInvalid: bool) =
+    [<InlineData(11L, true)>]
+    [<InlineData(12L, false)>]
+    [<InlineData(1010L, true)>]
+    [<InlineData(1221L, false)>]
+    [<InlineData(123456L, false)>]
+    [<InlineData(999999L, true)>]
+    let ``isInvalidProductId is Correct`` (productId: int64, isInvalid: bool) =
+        let expected = if isInvalid then Some productId else None
         let actual = isInvalidProductId productId
-        Assert.Equal(isInvalid, actual)
+        Assert.Equal(expected, actual)
+
+    [<Fact>]
+    let ``Run Sample Data`` () =
+        let parsedData = parseData sampleData
+        let expected = 1227775554L
+
+        let actual =
+            parsedData
+            |> Array.map processRange
+            |> Array.sum
+
+        Assert.Equal(expected, actual)
