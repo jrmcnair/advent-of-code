@@ -34,7 +34,6 @@ module Part1 =
 module Part2 =
     open Part2
 
- 
     [<Theory>]
     [<InlineData("123", 2, 23L)>]
     let ``getMaxJoltage Tests for simple data items`` (input: string, numBatteries: int, expected: int64) =
