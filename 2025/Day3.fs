@@ -1,5 +1,6 @@
 ﻿module AdventOfCode2025.Day3
 
+open System
 open System.IO
 
 let data =
@@ -8,9 +9,11 @@ let data =
 
 module Part1 =
     let getMaxJoltage (bank: string) : int =
-        let first = bank.Substring(0, bank.Length - 1) |> Seq.max
-        let index = bank.IndexOf(first) + 1
-        let second = bank.Substring(index, bank.Length - index) |> Seq.max
+        let chars = bank |> Seq.toList
+        
+        let first = chars |> List.truncate (chars.Length - 1) |> List.max
+        let index = chars |> List.findIndex ((=) first)
+        let second = chars |> List.skip (index + 1) |> List.max
 
         $"{first}{second}" |> int
         
@@ -21,21 +24,20 @@ module Part1 =
         |> printfn "Part1: Max Joltage = %d"
 
 module Part2 =
-    let findMaxDigit (input:string) : char * int =
-        let maxDigit = input |> Seq.max
-        let index = input.IndexOf(maxDigit) + 1
-        
-        maxDigit, index
-
     let rec getMaxJoltage (batteryCount: int) (bank: string) : int64 =
-        let rec worker (joltage: string) (input: string) (batteryCount: int) : string =
-            if batteryCount = 0 then
-                joltage
+        let rec worker (acc: char list) (input: string) (remaining: int) =
+            if remaining = 0 then
+                acc |> List.rev |> String.Concat |> int64
             else
-                let digit, index = input.Substring(0, input.Length - batteryCount + 1) |> findMaxDigit
-                worker $"{joltage}{digit}" (input.Substring(index, input.Length - index)) (batteryCount - 1)
+                let digit, index =
+                    input
+                    |> Seq.take (input.Length - remaining + 1)
+                    |> Seq.mapi (fun idx digit -> digit, idx + 1)
+                    |> Seq.maxBy fst
+
+                worker (digit :: acc) (input.Substring(index)) (remaining - 1)
         
-        worker "" bank batteryCount |> int64
+        worker [] bank batteryCount
 
     let run () =
         data
