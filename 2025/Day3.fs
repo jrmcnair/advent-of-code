@@ -21,6 +21,24 @@ module Part1 =
         |> printfn "Part1: Max Joltage = %d"
 
 module Part2 =
+    let findMaxDigit (input:string) : char * int =
+        let maxDigit = input |> Seq.max
+        let index = input.IndexOf(maxDigit) + 1
+        
+        maxDigit, index
+
+    let rec getMaxJoltage (batteryCount: int) (bank: string) : int64 =
+        let rec worker (joltage: string) (input: string) (batteryCount: int) : string =
+            if batteryCount = 0 then
+                joltage
+            else
+                let digit, index = input.Substring(0, input.Length - batteryCount + 1) |> findMaxDigit
+                worker $"{joltage}{digit}" (input.Substring(index, input.Length - index)) (batteryCount - 1)
+        
+        worker "" bank batteryCount |> int64
+
     let run () =
-        2
-        |> printfn "Part2: TBD = %d"
+        data
+        |> Seq.map (getMaxJoltage 12)
+        |> Seq.sum
+        |> printfn "Part2: Max Joltage = %d"
