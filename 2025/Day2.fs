@@ -8,7 +8,6 @@ type IdRange = {
     End: int64
 }
 
-// TODO: when to convert them to int?
 let parseData (input: string) : IdRange[] =
     input.Split(",", System.StringSplitOptions.RemoveEmptyEntries)
     |> Array.map (fun input ->

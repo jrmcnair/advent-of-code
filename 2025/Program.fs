@@ -1,18 +1,13 @@
 open System
 open AdventOfCode2025
 
-let part1StartTime = DateTime.Now
+let execute func =
+    let startTime = DateTime.Now
 
-//Day1.Part1.run()
-Day2.Part1.run()
+    func ()
 
-let part1Time = DateTime.Now
-printfn $"[{part1Time}] Completed in {(part1Time - part1StartTime).Milliseconds}ms"
+    let endTime = DateTime.Now
+    printfn $"[{endTime}] Completed in {(endTime - startTime).Milliseconds}ms"
 
-let part2StartTime = DateTime.Now
-
-//Day1.Part2.run()
-Day2.Part2.run()
-
-let part2Time = DateTime.Now
-printfn $"[{part2Time}] Completed in {(part2Time - part2StartTime).Milliseconds}ms"
+execute Day3.Part1.run
+execute Day3.Part2.run
