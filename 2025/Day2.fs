@@ -1,6 +1,7 @@
 ﻿module AdventOfCode2025.Day2
 
 open System.IO
+open System.Linq
 
 type IdRange = {
     Start: int64
@@ -44,3 +45,35 @@ module Part1 =
         |> Array.map processRange
         |> Array.sum
         |> printfn "Part1: Sum of Invalid Ids = %d"
+
+module Part2 =
+    let isOdd (num: int) : bool =
+        num % 2 = 1
+
+    let chunkedProductIdIsInvalid (productIdAsString: string) (chunkSize: int) : bool =
+        let chunks = productIdAsString.Chunk(chunkSize)
+        Seq.forall(fun chunk -> chunk = chunks.First()) chunks
+
+    let isInvalidProductId (productId: int64): int64 option =
+        let productIdAsString = productId.ToString()
+        let numDigits = productIdAsString.Length
+
+        let hasAnInvalidChunkSize =
+            seq { 1..(numDigits/2) }
+            |> Seq.map (chunkedProductIdIsInvalid productIdAsString)
+            |> Seq.exists id
+
+        if hasAnInvalidChunkSize then
+            Some productId
+        else
+            None
+    let processRange (range: IdRange) =
+        seq {range.Start..range.End}
+        |> Seq.choose isInvalidProductId
+        |> Seq.fold (+) 0L
+
+    let run () =
+        data
+        |> Array.map processRange
+        |> Array.sum
+        |> printfn "Part2: Sum of Invalid Ids = %d"

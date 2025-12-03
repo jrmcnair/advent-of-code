@@ -12,7 +12,7 @@ printfn $"[{part1Time}] Completed in {(part1Time - part1StartTime).Milliseconds}
 let part2StartTime = DateTime.Now
 
 //Day1.Part2.run()
-//Day2.Part2.run()
+Day2.Part2.run()
 
 let part2Time = DateTime.Now
 printfn $"[{part2Time}] Completed in {(part2Time - part2StartTime).Milliseconds}ms"
