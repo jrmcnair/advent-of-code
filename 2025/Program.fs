@@ -9,5 +9,5 @@ let execute func =
     let endTime = DateTime.Now
     printfn $"[{endTime}] Completed in {(endTime - startTime).Milliseconds}ms"
 
-execute Day5.Part1.run
-execute Day5.Part2.run
+execute Day4.Part1.run
+execute Day4.Part2.run

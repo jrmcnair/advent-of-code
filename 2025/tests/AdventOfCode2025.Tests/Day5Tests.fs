@@ -39,7 +39,7 @@ module Part2 =
         let result =
             Parse.freshIngredientRanges sampleData
             |> mergeRanges
-            |> rangesToSet
-            |> Set.count
+            |> List.map Range.count
+            |> List.sum
         
-        Assert.Equal(14, result)
+        Assert.Equal(14L, result)
