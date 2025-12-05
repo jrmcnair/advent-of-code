@@ -1,6 +1,7 @@
 ﻿module Tests.Day5
 
 open AdventOfCode2025.Day5
+open AdventOfCode2025.Day5.Part2
 open Xunit
 
 let sampleData = """3-5
@@ -35,4 +36,10 @@ module Part2 =
 
     [<Fact>]
     let ``Run Sample Data`` () =
-        Assert.True(true)
+        let result =
+            Parse.freshIngredientRanges sampleData
+            |> mergeRanges
+            |> rangesToSet
+            |> Set.count
+        
+        Assert.Equal(14, result)
