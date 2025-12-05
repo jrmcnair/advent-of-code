@@ -3,7 +3,16 @@
 open AdventOfCode2025.Day4
 open Xunit
 
-let sampleData = """"""
+let sampleData = """..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@."""
 
 module Part1 =
     open Part1

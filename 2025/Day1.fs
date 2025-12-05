@@ -2,6 +2,8 @@
 
 open System.IO
 
+// https://adventofcode.com/2025/day/1
+
 type Rotation = {
     Direction:  Direction
     Distance: int

@@ -3,6 +3,8 @@
 open System
 open System.IO
 
+// https://adventofcode.com/2025/day/3
+
 let data =
     "./input/day3.txt"
     |> File.ReadLines

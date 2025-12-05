@@ -3,6 +3,8 @@
 open System.IO
 open System.Linq
 
+// https://adventofcode.com/2025/day/2
+
 type IdRange = {
     Start: int64
     End: int64
