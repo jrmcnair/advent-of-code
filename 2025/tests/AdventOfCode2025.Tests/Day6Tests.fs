@@ -28,8 +28,14 @@ module Part2 =
 
     [<Fact>]
     let ``Run Sample Data`` () =
-        let actual =
+        let expected = 3263827L
+        let problems = 
             sampleData.Split(System.Environment.NewLine)
-            |> parse 3
+            |> parse
 
-        Assert.Equal(4, actual.Length)
+        let actual =
+            problems
+            |> List.map Problem.solve
+            |> List.sum
+
+        Assert.Equal(expected, actual)

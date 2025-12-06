@@ -21,7 +21,7 @@ module Problem =
         | _ -> failwith "Unknown operation"
 
 module Part1 =
-    let parse (size: int) (input: string[]) : Problem array =
+    let parse (size: int) (input: string[]) : Problem[] =
         let numbers =
             input[0..size-1]
             |> Array.map (fun (line: string) ->
@@ -54,35 +54,50 @@ module Part1 =
 
 module Part2 =
     let getNumber (input: string[]) (col: int) =
-        [| 0 .. input.Length - 1 |]
-        |> Array.map (fun row -> input[row][col])
-        |> string
-        |> int64
+        let chars =
+            [| 0 .. input.Length - 2 |]
+            |> Array.map (fun row -> input[row][col])
+            |> Array.filter (fun c -> not (System.Char.IsWhiteSpace c))
+        let str = new string(chars)
+        
+        str |> int64
 
-    let parse (size: int) (input: string[]) : Problem array =
-        let operations = input[size]
+    let parse (input: string[]) : Problem list =
+        let operations = input[input.Length - 1]
 
-        let loop (problems: Problem[]) (col: int) : Problem[] =
-            let operation = operations[col] |> Problem.toOperation
+        let findNextOperation (start: int) : int option =
+            if start >= operations.Length then
+                None
+            else
+                operations
+                |> Seq.skip start
+                |> Seq.indexed
+                |> Seq.tryFind (fun (_, c) -> not (System.Char.IsWhiteSpace c))
+                |> Option.map (fun (idx, _) -> idx + start)
+        
+        let rec loop (problems: Problem list) (col: int) : Problem list =
+            match findNextOperation (col + 1) with
+            | Some next ->
+                let problem =
+                    { Numbers = [col..next - 2] |> List.map (getNumber input) |> List.toArray
+                      Operation = operations[col] |> Problem.toOperation }
 
-            operations.
-            
-                        // find next operation
-            
-            let x =
-                { Numbers = [|  |]
-                    // [| 0..size-1 |]
-                    // |> Array.map (fun row -> input[row][col])
-                    // |> string
-                    // |> int64
-                  Operation = Problem.toOperation (input[size][col]) }
-            // get operation at idx
-            // starting at idx, get number at each char until we reach next operation or end of line
-            
-            [| x |]
+                loop (problem::problems) next
+            | None ->
+                let problem =
+                    { Numbers = [col .. operations.Length - 1] |> List.map (getNumber input) |> List.toArray
+                      Operation = operations[col] |> Problem.toOperation }
+                problem::problems
 
         loop [] 0
 
     let run () =
-        0
+        let problems =
+            "./input/day6.txt"
+            |> File.ReadAllLines
+            |> parse
+
+        problems
+        |> List.map Problem.solve
+        |> List.sum
         |> printfn "Part2: %d"
