@@ -76,6 +76,35 @@ module Part1 =
         |> printfn "Part1: %d"
 
 module Part2 =
+    let countTimelines (grid: char[,]): int64 =
+        let numRows = grid.GetLength(0)
+        let numCols = grid.GetLength(1)
+
+        // Initial timelines: map first row into 1L or 0L
+        let initialTimelines =
+            [| for col in 0 .. numCols - 1 ->
+                match grid.[0, col] with
+                | 'S' -> 1L
+                | _   -> 0L |]
+
+        // Fold over rows 1 .. numRows-1
+        let finalTimelines =
+            [1 .. numRows - 1]
+            |> List.fold (fun currentTimelines row ->
+                [| for col in 0 .. numCols - 1 ->
+                    let straightDown =
+                        if grid.[row, col] <> '^' then currentTimelines.[col] else 0L
+                    let fromLeft =
+                        if col > 0 && grid.[row, col - 1] = '^' then currentTimelines.[col - 1] else 0L
+                    let fromRight =
+                        if col < numCols - 1 && grid.[row, col + 1] = '^' then currentTimelines.[col + 1] else 0L
+                    straightDown + fromLeft + fromRight |]
+            ) initialTimelines
+
+        finalTimelines |> Array.sum
+
     let run () =
-        0
+        input
+        |> array2D
+        |> countTimelines
         |> printfn "Part2: %d"
